@@ -20,11 +20,11 @@ public class MessageFormatterServiceImpl implements MessageFormatterService {
     public Message formatInfoMessage(String name) {
         Message infoMessage = new Message();
 
-        String body = String.format("Good %s, %s!\n" +
+        String body = String.format("Good %s, %s!\n\n" +
                         "We would like to inform You, that today %s is a really great day for You.\n" +
                         "We also want to wish You good luck and be happy! \n" +
                         "Thank You for choosing us! %s",
-                formatGreetingByTime(), name, LocalDate.now().toString(), sign());
+                formatGreetingByTime(), name, LocalDate.now(), sign());
 
         infoMessage.setTopic("You're the great!");
         infoMessage.setBody(body);
@@ -36,12 +36,12 @@ public class MessageFormatterServiceImpl implements MessageFormatterService {
     public Message formatErrorMessage(String name, String reason) {
         Message errorMessage = new Message();
 
-        String body = String.format("Good %s %s!\n" +
+        String body = String.format("Good %s %s!\n\n" +
                 "We have to inform You that today our service not available due to the %s.\n" +
                 "We hope that will be able to fix it ASAP.\n" +
                 "Really sorry for this worry!\n" +
                 "Thank you to choosing us! %s",
-                formatGreetingByTime(), name, LocalDate.now().toString(), sign());
+                formatGreetingByTime(), name, LocalDate.now(), sign());
 
         errorMessage.setTopic("Important information");
         errorMessage.setBody(body);
@@ -53,10 +53,10 @@ public class MessageFormatterServiceImpl implements MessageFormatterService {
     public Message formatGreetingMessage(String name) {
         Message greetingMessage = new Message();
 
-        String body = String.format("Good %s, %s!\n" +
+        String body = String.format("Good %s, %s!\n\n" +
                 "Thank you for subscribing us!\n" +
                 "We hope You will really enjoy our service! %s",
-                formatGreetingByTime(), name, LocalDate.now().toString(), sign());
+                formatGreetingByTime(), name, sign());
 
         greetingMessage.setTopic("Greeting!");
         greetingMessage.setBody(body);

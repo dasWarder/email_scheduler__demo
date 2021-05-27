@@ -36,15 +36,18 @@ public class SubscriberServiceImpl implements SubscriberService {
     public Subscriber save(Subscriber subscriber) {
         log.info("Check the subscriber with email={}", subscriber.getEmail());
 
+        Optional<Subscriber> subscriberByEmail = subscriberRepository.getSubscriberByEmail(subscriber.getEmail());
+
         notNull(subscriber, "The subscriber must be not NULL");
         Subscriber storedSub = subscriberRepository.save(subscriber);
 
         log.info("The subscriber with id={}", storedSub.getId());
 
-        if(getByEmail(subscriber.getEmail()) == null) {
+        if(!subscriberByEmail.isPresent()) {
             log.info("Greeting a new subscriber with id={} by email", storedSub.getId());
 
-            Message greetingMessage = messageFormatterService.formatGreetingMessage(subscriber.getName());
+            Message greetingMessage = messageFormatterService.formatGreetingMessage(storedSub.getName());
+            greetingMessage.setTo(storedSub.getEmail());
             emailService.sendEmail(greetingMessage);
 
             log.info("Greeting by email for the subscriber with id={} was successfully completed", storedSub.getId());
