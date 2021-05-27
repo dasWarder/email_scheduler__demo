@@ -2,6 +2,8 @@ package com.example.emailscheduler.service.subscriber;
 
 import com.example.emailscheduler.model.Subscriber;
 
+import java.util.List;
+
 public interface SubscriberService {
 
     Subscriber save(Subscriber subscriber);
@@ -13,4 +15,6 @@ public interface SubscriberService {
     Subscriber getByEmail(String email);
 
     void deleteByEmail(String email);
+
+    List<Subscriber> getAll();
 }

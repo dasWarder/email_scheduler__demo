@@ -1,6 +1,8 @@
 package com.example.emailscheduler.controller;
 
 import com.example.emailscheduler.model.Subscriber;
+import com.example.emailscheduler.service.email.sender.EmailService;
+import com.example.emailscheduler.service.formatter.MessageFormatterService;
 import com.example.emailscheduler.service.subscriber.SubscriberService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.List;
 
 
 @Slf4j
@@ -40,5 +44,17 @@ public class SubscriberController {
         log.info("The subscriber with id={} was successfully subscribed", storedSub.getId());
 
         return "successful";
+    }
+
+    @GetMapping("/subs")
+    public String getSubscribers(Model model) {
+
+        List<Subscriber> subscribers = subscriberService.getAll();
+
+        log.info("Add the collection of subscribers to the model");
+
+        model.addAttribute("subscribers", subscribers);
+
+        return "subscribers";
     }
 }

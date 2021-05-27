@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Subscribers</title>
+</head>
+<body>
+    <h1>Subscribers:</h1>
+    <table th:object="${subscribers}">
+        <tr>
+            <th>Email</th>
+            <th>Name</th>
+        </tr>
+        <tr th:each="subscriber:${subscribers}">
+            <td th:text="${subscriber.email}"></td>
+            <td th:text="${subscriber.name}"></td>
+        </tr>
+    </table>
+</body>
+</html>

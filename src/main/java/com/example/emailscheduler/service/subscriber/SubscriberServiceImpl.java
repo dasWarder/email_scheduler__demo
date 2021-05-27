@@ -1,12 +1,15 @@
 package com.example.emailscheduler.service.subscriber;
 
 import com.example.emailscheduler.exception.SubscriberNotFoundException;
+import com.example.emailscheduler.model.Message;
 import com.example.emailscheduler.model.Subscriber;
 import com.example.emailscheduler.repository.SubscriberRepository;
+import com.example.emailscheduler.service.email.sender.EmailService;
+import com.example.emailscheduler.service.formatter.MessageFormatterService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.util.Assert.notNull;
@@ -17,9 +20,16 @@ public class SubscriberServiceImpl implements SubscriberService {
 
     private SubscriberRepository subscriberRepository;
 
-    @Autowired
-    public SubscriberServiceImpl(SubscriberRepository subscriberRepository) {
+    private MessageFormatterService messageFormatterService;
+
+    private EmailService emailService;
+
+    public SubscriberServiceImpl(SubscriberRepository subscriberRepository,
+                                 MessageFormatterService messageFormatterService,
+                                 EmailService emailService) {
         this.subscriberRepository = subscriberRepository;
+        this.messageFormatterService = messageFormatterService;
+        this.emailService = emailService;
     }
 
     @Override
@@ -30,6 +40,15 @@ public class SubscriberServiceImpl implements SubscriberService {
         Subscriber storedSub = subscriberRepository.save(subscriber);
 
         log.info("The subscriber with id={}", storedSub.getId());
+
+        if(getByEmail(subscriber.getEmail()) == null) {
+            log.info("Greeting a new subscriber with id={} by email", storedSub.getId());
+
+            Message greetingMessage = messageFormatterService.formatGreetingMessage(subscriber.getName());
+            emailService.sendEmail(greetingMessage);
+
+            log.info("Greeting by email for the subscriber with id={} was successfully completed", storedSub.getId());
+        }
 
         return storedSub;
     }
@@ -76,5 +95,17 @@ public class SubscriberServiceImpl implements SubscriberService {
         subscriberRepository.deleteSubscriberByEmail(email);
 
         log.info("The subscriber with email={} was successfully removed", email);
+    }
+
+    @Override
+    public List<Subscriber> getAll() {
+        log.info("The attempt to get the collection of all subscribers");
+
+        List<Subscriber> subscribers = subscriberRepository.findAll();
+
+        notNull(subscribers, "The collection of subscribers must be not NULL");
+        log.info("The collection of subscribers was successfully received");
+
+        return subscribers;
     }
 }
