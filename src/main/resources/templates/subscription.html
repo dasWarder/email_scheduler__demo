@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Subscription</title>
+</head>
+<body>
+    <h1>Enter your data for subscribing to our service:</h1>
+    <div>
+        <form method="post" action="#" th:action="@{/subscribe}" th:object="${subscriber}">
+            <h2>Subscribe</h2>
+            <p>
+                <label >Email</label>
+                <input type="text" th:name="email" id="email" name="email" th:field="*{email}" required autofocus>
+            </p>
+            <p>
+                <label >Name</label>
+                <input type="text" th:name="name" id="name" name="name" th:field="*{name}" required>
+            </p>
+            <button type="submit">Subscribe</button>
+        </form>
+    </div>
+</body>
+</html>
